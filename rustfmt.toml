@@ -1,0 +1,5 @@
+# Rust formatter configuration
+max_width = 80
+hard_tabs = false
+tab_spaces = 4
+edition = "2024"
