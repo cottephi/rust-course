@@ -1,24 +1,40 @@
-#[derive(Debug)]
-struct Deck {
-    cards: Vec<String>,
-}
+// Import the game module
+mod game;
+
+// Use Deck from the game module
+use game::Deck;
 
 fn main() {
-    let suits = ["Hearts", "Diamonds", "Spades", "Clubs"];
-    let values = [
-        "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen",
-        "King",
-    ];
+    // Arrays : fixed size, more performant (very slightly). Most importantly,
+    // it indicates to other devs that it is constant in size.
 
-    let mut cards = vec![];
+    // Vector : can grow and shrink
+    let mut deck = Deck::new();
+    let n_players = 2;
+    let mut deal_size = 3;
 
-    for suit in suits {
-        for value in values {
-            let card = format!("{} of {}", value, suit);
-            cards.push(card);
+    deck.shuffle();
+
+    println!("Shuffled deck: {}", deck);
+    println!("Dealing...");
+
+    for i in 0..n_players {
+        while !deck.is_empty() {
+            match deck.deal(deal_size) {
+                Ok(cards) => {
+                    println!("Dealt: {:#?} cards to player {}", cards, i);
+                    println!("{} cards remaining", deck.len());
+                }
+                Err(_e) => {
+                    deal_size -= 1;
+                    println!(
+                        "Not enough cards left in deck. Reducing deal size to {}",
+                        deal_size
+                    );
+                }
+            }
         }
     }
-    let deck = Deck { cards };
-
-    println!("Here is your deck: {:?}", deck.cards);
 }
+
+// Made with Bob
